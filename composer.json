@@ -1,0 +1,54 @@
+{
+    "name": "ntzm/tusk",
+    "description": "PSR-7 compatible tus server for PHP",
+    "keywords": [
+        "tus"
+    ],
+    "license": "MIT",
+    "require": {
+        "php": "^7.2",
+        "ext-json": "*",
+        "aws/aws-sdk-php": "^3.129",
+        "psr/event-dispatcher": "^1.0",
+        "psr/http-message": "^1.0",
+        "webmozart/assert": "^1.6"
+    },
+    "require-dev": {
+        "friendsofphp/php-cs-fixer": "^2.16",
+        "infection/infection": "^0.15.0",
+        "mikey179/vfsstream": "^1.6",
+        "phpstan/phpstan": "^0.12.2",
+        "phpstan/phpstan-phpunit": "^0.12.1",
+        "phpstan/phpstan-webmozart-assert": "^0.12.0",
+        "phpunit/phpunit": "^8.5",
+        "slim/psr7": "^0.6.0",
+        "slim/slim": "^4.3",
+        "vimeo/psalm": "^3.7"
+    },
+    "autoload": {
+        "psr-4": {
+            "Tusk\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "TuskTests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "test": "phpunit",
+        "static-analysis": [
+            "phpstan analyse",
+            "psalm"
+        ],
+        "code-style": "php-cs-fixer fix",
+        "review": [
+            "@test",
+            "@static-analysis",
+            "@code-style"
+        ]
+    },
+    "config": {
+        "sort-packages": true
+    }
+}
