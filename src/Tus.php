@@ -4,8 +4,6 @@ namespace Tusk;
 
 use InvalidArgumentException;
 use Psr\EventDispatcher\EventDispatcherInterface;
-use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\ServerRequestInterface;
 use Tusk\Handler\DeleteHandler;
 use Tusk\Handler\HeadHandler;
 use Tusk\Handler\OptionsHandler;
@@ -54,35 +52,33 @@ final class Tus
         $this->eventDispatcher = $eventDispatcher ?? new NullEventDispatcher();
     }
 
-    public function handle(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
+    public function optionsHandler(): OptionsHandler
     {
-        $method = $request->getMethod();
+        return new OptionsHandler($this->maxFileSize);
+    }
 
-        if ($method === 'OPTIONS') {
-            return (new OptionsHandler($this->maxFileSize))->handle($response);
-        }
+    public function postHandler(): PostHandler
+    {
+        return new PostHandler(
+            $this->storage,
+            $this->idGenerator,
+            $this->maxFileSize,
+            $this->locationGenerator
+        );
+    }
 
-        if ($method === 'POST') {
-            return (new PostHandler(
-                $this->storage,
-                $this->idGenerator,
-                $this->maxFileSize,
-                $this->locationGenerator
-            ))->handle($request, $response);
-        }
+    public function headHandler(): HeadHandler
+    {
+        return new HeadHandler($this->storage);
+    }
 
-        if ($method === 'HEAD') {
-            return (new HeadHandler($this->storage))->handle($request, $response);
-        }
+    public function patchHandler(): PatchHandler
+    {
+        return new PatchHandler($this->storage, $this->eventDispatcher);
+    }
 
-        if ($method === 'PATCH') {
-            return (new PatchHandler($this->storage, $this->eventDispatcher))->handle($request, $response);
-        }
-
-        if ($method === 'DELETE') {
-            return (new DeleteHandler($this->storage))->handle($request, $response);
-        }
-
-        return $response->withStatus(405);
+    public function deleteHandler(): DeleteHandler
+    {
+        return new DeleteHandler($this->storage);
     }
 }
