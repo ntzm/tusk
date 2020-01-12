@@ -15,9 +15,9 @@ use Tusk\LocationGenerator\LocationGenerator;
 use Tusk\LocationGenerator\RelativeLocationGenerator;
 use Tusk\Storage\Storage;
 
-final class Tus
+final class Tusk
 {
-    public const VERSION = '1.0.0';
+    public const TUS_VERSION = '1.0.0';
 
     /** @var Storage */
     private $storage;

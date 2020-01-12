@@ -4,14 +4,14 @@ namespace TuskTests;
 
 use PHPUnit\Framework\TestCase;
 use Tusk\Storage\Storage;
-use Tusk\Tus;
+use Tusk\Tusk;
 
-final class TusTest extends TestCase
+final class TuskTest extends TestCase
 {
     public function testNegativeMaxFileSize(): void
     {
         $this->expectException(\InvalidArgumentException::class);
 
-        new Tus($this->createMock(Storage::class), -1);
+        new Tusk($this->createMock(Storage::class), -1);
     }
 }

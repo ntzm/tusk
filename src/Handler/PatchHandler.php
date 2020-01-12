@@ -9,7 +9,7 @@ use Tusk\Event\UploadComplete;
 use Tusk\FileNotFound;
 use Tusk\ShouldNotHappen;
 use Tusk\Storage\Storage;
-use Tusk\Tus;
+use Tusk\Tusk;
 use Webmozart\Assert\Assert;
 
 final class PatchHandler
@@ -28,10 +28,10 @@ final class PatchHandler
 
     public function handle(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
     {
-        $response = $response->withHeader('Tus-Resumable', Tus::VERSION);
+        $response = $response->withHeader('Tus-Resumable', Tusk::TUS_VERSION);
 
-        if ($request->getHeaderLine('Tus-Resumable') !== Tus::VERSION) {
-            return $response->withStatus(412)->withHeader('Tus-Version', Tus::VERSION);
+        if ($request->getHeaderLine('Tus-Resumable') !== Tusk::TUS_VERSION) {
+            return $response->withStatus(412)->withHeader('Tus-Version', Tusk::TUS_VERSION);
         }
 
         $id = $request->getAttribute('id');

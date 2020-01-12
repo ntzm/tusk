@@ -6,7 +6,7 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Tusk\FileNotFound;
 use Tusk\Storage\Storage;
-use Tusk\Tus;
+use Tusk\Tusk;
 
 final class HeadHandler
 {
@@ -20,10 +20,10 @@ final class HeadHandler
 
     public function handle(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
     {
-        $response = $response->withHeader('Tus-Resumable', Tus::VERSION);
+        $response = $response->withHeader('Tus-Resumable', Tusk::TUS_VERSION);
 
-        if ($request->getHeaderLine('Tus-Resumable') !== Tus::VERSION) {
-            return $response->withStatus(412)->withHeader('Tus-Version', Tus::VERSION);
+        if ($request->getHeaderLine('Tus-Resumable') !== Tusk::TUS_VERSION) {
+            return $response->withStatus(412)->withHeader('Tus-Version', Tusk::TUS_VERSION);
         }
 
         $response = $response->withHeader('Cache-Control', 'no-store');

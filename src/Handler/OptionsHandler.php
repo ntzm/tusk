@@ -3,7 +3,7 @@
 namespace Tusk\Handler;
 
 use Psr\Http\Message\ResponseInterface;
-use Tusk\Tus;
+use Tusk\Tusk;
 
 final class OptionsHandler
 {
@@ -17,14 +17,14 @@ final class OptionsHandler
 
     public function handle(ResponseInterface $response): ResponseInterface
     {
-        $response = $response->withHeader('Tus-Resumable', Tus::VERSION);
+        $response = $response->withHeader('Tus-Resumable', Tusk::TUS_VERSION);
 
         if ($this->maxFileSize !== null) {
             $response = $response->withHeader('Tus-Max-Size', (string) $this->maxFileSize);
         }
 
         return $response
-            ->withHeader('Tus-Version', Tus::VERSION)
+            ->withHeader('Tus-Version', Tusk::TUS_VERSION)
             ->withHeader('Tus-Extension', 'creation,termination')
             ->withStatus(204)
         ;

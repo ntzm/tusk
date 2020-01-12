@@ -5,7 +5,7 @@ declare(strict_types=1);
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Slim\Factory\AppFactory;
-use Tusk\Tus;
+use Tusk\Tusk;
 
 require __DIR__ . '/../vendor/autoload.php';
 
@@ -21,7 +21,7 @@ $app->any('/files[/{id}]', function (ServerRequestInterface $request, ResponseIn
     $response = $response->withHeader('Access-Control-Expose-Headers', '*');
     $response = $response->withHeader('Access-Control-Allow-Methods', '*');
 
-    $tus = new Tus(
+    $tus = new Tusk(
         new \Tusk\Storage\S3Storage(new \Aws\S3\S3Client([
             'version' => '2006-03-01',
             'region' => 'a',
