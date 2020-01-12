@@ -21,7 +21,7 @@ final class FilesystemStorage implements Storage
         restore_error_handler();
 
         if ($offset === false) {
-            throw new FileNotFound();
+            throw FileNotFound::withId($id);
         }
 
         return $offset;
@@ -30,7 +30,7 @@ final class FilesystemStorage implements Storage
     public function append(string $id, $data): void
     {
         if (! file_exists($this->directory . $id)) {
-            throw new FileNotFound();
+            throw FileNotFound::withId($id);
         }
 
         set_error_handler(static function () {});
@@ -38,7 +38,7 @@ final class FilesystemStorage implements Storage
         restore_error_handler();
 
         if ($file === false) {
-            throw new FileNotFound();
+            throw FileNotFound::withId($id);
         }
 
         stream_copy_to_stream($data, $file);
@@ -66,7 +66,7 @@ final class FilesystemStorage implements Storage
     public function delete(string $id): void
     {
         if (! file_exists($this->directory . $id)) {
-            throw new FileNotFound();
+            throw FileNotFound::withId($id);
         }
 
         unlink($this->directory . $id);
@@ -95,7 +95,7 @@ final class FilesystemStorage implements Storage
         restore_error_handler();
 
         if ($contents === false) {
-            throw new FileNotFound();
+            throw FileNotFound::withId($id);
         }
 
         /** @var array{length: int, metadata: string|null} $data */

@@ -48,7 +48,7 @@ final class S3Storage implements Storage
                     ])->toArray()['ContentLength'];
                 } catch (S3Exception $e) {
                     if ($e->getStatusCode() === 404) {
-                        throw new FileNotFound();
+                        throw FileNotFound::withId($id);
                     }
 
                     throw $e;
@@ -79,7 +79,7 @@ final class S3Storage implements Storage
             ]);
         } catch (S3Exception $e) {
             if ($e->getStatusCode() === 404) {
-                throw new FileNotFound();
+                throw FileNotFound::withId($id);
             }
 
             throw $e;
@@ -112,7 +112,7 @@ final class S3Storage implements Storage
             ]);
         } catch (S3Exception $e) {
             if ($e->getStatusCode() === 404) {
-                throw new FileNotFound();
+                throw FileNotFound::withId($id);
             }
 
             throw $e;
@@ -154,7 +154,7 @@ final class S3Storage implements Storage
             ]);
         } catch (S3Exception $e) {
             if ($e->getStatusCode() === 404) {
-                throw new FileNotFound();
+                throw FileNotFound::withId($id);
             }
 
             throw $e;
@@ -188,7 +188,7 @@ final class S3Storage implements Storage
             return $metadata;
         } catch (S3Exception $e) {
             if ($e->getStatusCode() === 404) {
-                throw new FileNotFound();
+                throw FileNotFound::withId($id);
             }
 
             throw $e;
