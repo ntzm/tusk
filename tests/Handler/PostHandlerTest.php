@@ -40,7 +40,7 @@ final class PostHandlerTest extends TestCase
 
         $handler = new PostHandler($storage, $idGenerator, null, $locationGenerator);
 
-        $response = $handler->handle($request, new Response());
+        $response = $handler->__invoke($request, new Response());
 
         $this->assertSame(201, $response->getStatusCode());
         $this->assertSame([
@@ -76,7 +76,7 @@ final class PostHandlerTest extends TestCase
 
         $handler = new PostHandler($storage, $idGenerator, null, $locationGenerator);
 
-        $response = $handler->handle($request, new Response());
+        $response = $handler->__invoke($request, new Response());
 
         $this->assertSame(201, $response->getStatusCode());
         $this->assertSame([
@@ -111,7 +111,7 @@ final class PostHandlerTest extends TestCase
 
         $handler = new PostHandler($storage, $idGenerator, 100, $locationGenerator);
 
-        $response = $handler->handle($request, new Response());
+        $response = $handler->__invoke($request, new Response());
 
         $this->assertSame(201, $response->getStatusCode());
         $this->assertSame([
@@ -142,7 +142,7 @@ final class PostHandlerTest extends TestCase
             new Stream(stream_context_create([]))
         );
 
-        $response = $handler->handle($request, new Response());
+        $response = $handler->__invoke($request, new Response());
 
         $this->assertSame(413, $response->getStatusCode());
         $this->assertSame([
@@ -169,7 +169,7 @@ final class PostHandlerTest extends TestCase
             new Stream(stream_context_create([]))
         );
 
-        $response = $handler->handle($request, new Response());
+        $response = $handler->__invoke($request, new Response());
 
         $this->assertSame(412, $response->getStatusCode());
         $this->assertSame([

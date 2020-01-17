@@ -18,7 +18,7 @@ final class DeleteHandler
         $this->storage = $storage;
     }
 
-    public function handle(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
+    public function __invoke(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
     {
         $response = $response->withHeader('Tus-Resumable', Tusk::TUS_VERSION);
 

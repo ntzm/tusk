@@ -35,7 +35,7 @@ final class PostHandler
         $this->locationGenerator = $locationGenerator;
     }
 
-    public function handle(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
+    public function __invoke(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
     {
         $response = $response->withHeader('Tus-Resumable', Tusk::TUS_VERSION);
 

@@ -3,7 +3,11 @@
 namespace TuskTests\Handler;
 
 use PHPUnit\Framework\TestCase;
+use Slim\Psr7\Headers;
+use Slim\Psr7\Request;
 use Slim\Psr7\Response;
+use Slim\Psr7\Stream;
+use Slim\Psr7\Uri;
 use Tusk\Handler\OptionsHandler;
 
 final class OptionsHandlerTest extends TestCase
@@ -12,7 +16,15 @@ final class OptionsHandlerTest extends TestCase
     {
         $handler = new OptionsHandler(null);
 
-        $response = $handler->handle(new Response());
+        $request = new Request(
+            'OPTIONS',
+            new Uri('', ''),
+            new Headers(['Tus-Resumable' => '1.0.0']),
+            [],
+            [],
+            new Stream(stream_context_create([]))
+        );
+        $response = $handler->__invoke($request, new Response());
 
         $this->assertSame([
             'Tus-Resumable' => ['1.0.0'],
@@ -28,7 +40,15 @@ final class OptionsHandlerTest extends TestCase
     {
         $handler = new OptionsHandler(100);
 
-        $response = $handler->handle(new Response());
+        $request = new Request(
+            'OPTIONS',
+            new Uri('', ''),
+            new Headers(['Tus-Resumable' => '1.0.0']),
+            [],
+            [],
+            new Stream(stream_context_create([]))
+        );
+        $response = $handler->__invoke($request, new Response());
 
         $this->assertSame([
             'Tus-Resumable' => ['1.0.0'],

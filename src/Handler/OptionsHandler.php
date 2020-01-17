@@ -3,6 +3,7 @@
 namespace Tusk\Handler;
 
 use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 use Tusk\Tusk;
 
 final class OptionsHandler
@@ -15,7 +16,7 @@ final class OptionsHandler
         $this->maxFileSize = $maxFileSize;
     }
 
-    public function handle(ResponseInterface $response): ResponseInterface
+    public function __invoke(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
     {
         $response = $response->withHeader('Tus-Resumable', Tusk::TUS_VERSION);
 

@@ -33,7 +33,7 @@ final class HeadHandlerTest extends TestCase
         );
         $request = $request->withAttribute('id', 'foo');
 
-        $response = $handler->handle($request, new Response());
+        $response = $handler->__invoke($request, new Response());
 
         $this->assertSame(204, $response->getStatusCode());
         $this->assertSame([
@@ -64,7 +64,7 @@ final class HeadHandlerTest extends TestCase
         );
         $request = $request->withAttribute('id', 'foo');
 
-        $response = $handler->handle($request, new Response());
+        $response = $handler->__invoke($request, new Response());
 
         $this->assertSame(204, $response->getStatusCode());
         $this->assertSame([
@@ -92,7 +92,7 @@ final class HeadHandlerTest extends TestCase
             new Stream(stream_context_create([]))
         );
 
-        $response = $handler->handle($request, new Response());
+        $response = $handler->__invoke($request, new Response());
 
         $this->assertSame(404, $response->getStatusCode());
         $this->assertSame([
@@ -119,7 +119,7 @@ final class HeadHandlerTest extends TestCase
         );
         $request = $request->withAttribute('id', 'foo');
 
-        $response = $handler->handle($request, new Response());
+        $response = $handler->__invoke($request, new Response());
 
         $this->assertSame(404, $response->getStatusCode());
         $this->assertSame([
@@ -146,7 +146,7 @@ final class HeadHandlerTest extends TestCase
         );
         $request = $request->withAttribute('id', 'foo');
 
-        $response = $handler->handle($request, new Response());
+        $response = $handler->__invoke($request, new Response());
 
         $this->assertSame(404, $response->getStatusCode());
         $this->assertSame([
@@ -173,7 +173,7 @@ final class HeadHandlerTest extends TestCase
         );
         $request = $request->withAttribute('id', 'foo');
 
-        $response = $handler->handle($request, new Response());
+        $response = $handler->__invoke($request, new Response());
 
         $this->assertSame(404, $response->getStatusCode());
         $this->assertSame([
@@ -196,7 +196,7 @@ final class HeadHandlerTest extends TestCase
             new Stream(stream_context_create([]))
         );
 
-        $response = $handler->handle($request, new Response());
+        $response = $handler->__invoke($request, new Response());
 
         $this->assertSame(412, $response->getStatusCode());
         $this->assertSame([

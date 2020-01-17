@@ -31,7 +31,7 @@ final class DeleteHandlerTest extends TestCase
         );
         $request = $request->withAttribute('id', 'foo');
 
-        $response = $handler->handle($request, new Response());
+        $response = $handler->__invoke($request, new Response());
 
         $this->assertSame(['Tus-Resumable' => ['1.0.0']], $response->getHeaders());
         $this->assertSame(204, $response->getStatusCode());
@@ -54,7 +54,7 @@ final class DeleteHandlerTest extends TestCase
             new Stream(stream_context_create([]))
         );
 
-        $response = $handler->handle($request, new Response());
+        $response = $handler->__invoke($request, new Response());
 
         $this->assertSame(['Tus-Resumable' => ['1.0.0']], $response->getHeaders());
         $this->assertSame(404, $response->getStatusCode());
@@ -78,7 +78,7 @@ final class DeleteHandlerTest extends TestCase
         );
         $request = $request->withAttribute('id', 'foo');
 
-        $response = $handler->handle($request, new Response());
+        $response = $handler->__invoke($request, new Response());
 
         $this->assertSame(['Tus-Resumable' => ['1.0.0']], $response->getHeaders());
         $this->assertSame(404, $response->getStatusCode());
@@ -98,7 +98,7 @@ final class DeleteHandlerTest extends TestCase
             new Stream(stream_context_create([]))
         );
 
-        $response = $handler->handle($request, new Response());
+        $response = $handler->__invoke($request, new Response());
 
         $this->assertSame(412, $response->getStatusCode());
         $this->assertSame([

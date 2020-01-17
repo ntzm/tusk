@@ -46,7 +46,7 @@ final class PatchHandlerTest extends TestCase
         );
         $request = $request->withAttribute('id', 'foo');
 
-        $response = $handler->handle($request, new Response());
+        $response = $handler->__invoke($request, new Response());
 
         $this->assertSame(204, $response->getStatusCode());
         $this->assertSame([
@@ -74,7 +74,7 @@ final class PatchHandlerTest extends TestCase
         );
         $request = $request->withAttribute('id', 'foo');
 
-        $response = $handler->handle($request, new Response());
+        $response = $handler->__invoke($request, new Response());
 
         $this->assertSame(415, $response->getStatusCode());
         $this->assertSame([
@@ -100,7 +100,7 @@ final class PatchHandlerTest extends TestCase
             new Stream(stream_context_create([]))
         );
 
-        $response = $handler->handle($request, new Response());
+        $response = $handler->__invoke($request, new Response());
 
         $this->assertSame(404, $response->getStatusCode());
         $this->assertSame([
@@ -134,7 +134,7 @@ final class PatchHandlerTest extends TestCase
         );
         $request = $request->withAttribute('id', 'foo');
 
-        $response = $handler->handle($request, new Response());
+        $response = $handler->__invoke($request, new Response());
 
         $this->assertSame(409, $response->getStatusCode());
         $this->assertSame([
@@ -167,7 +167,7 @@ final class PatchHandlerTest extends TestCase
         );
         $request = $request->withAttribute('id', 'foo');
 
-        $response = $handler->handle($request, new Response());
+        $response = $handler->__invoke($request, new Response());
 
         $this->assertSame(404, $response->getStatusCode());
         $this->assertSame([
@@ -208,7 +208,7 @@ final class PatchHandlerTest extends TestCase
 
         $this->expectException(ShouldNotHappen::class);
 
-        $handler->handle($request, new Response());
+        $handler->__invoke($request, new Response());
     }
 
     public function testIncorrectVersion(): void
@@ -224,7 +224,7 @@ final class PatchHandlerTest extends TestCase
             new Stream(stream_context_create([]))
         );
 
-        $response = $handler->handle($request, new Response());
+        $response = $handler->__invoke($request, new Response());
 
         $this->assertSame(412, $response->getStatusCode());
         $this->assertSame([
