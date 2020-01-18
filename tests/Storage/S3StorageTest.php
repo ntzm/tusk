@@ -84,6 +84,7 @@ final class S3StorageTest extends TestCase
         ]);
 
         $this->assertSame($fiveMb . 'b', $getObjectResponse['Body']->getContents());
+        $this->assertSame(5242881, $this->storage->getOffset('foo'));
     }
 
     public function testCreateWithoutMetadata(): void
@@ -151,5 +152,32 @@ final class S3StorageTest extends TestCase
         $this->assertEmpty($uploads);
 
         $this->assertFalse($this->s3->doesObjectExist($this->bucket, $this->keyPrefix . 'foo.meta'));
+    }
+
+    public function testCompleteNotExists(): void
+    {
+        $this->expectException(FileNotFound::class);
+        $this->expectExceptionMessage('File with ID foo was not found');
+
+        $this->storage->complete('foo');
+    }
+
+    public function testAppendNotExists(): void
+    {
+        $data = fopen('data://text/plain,b', 'r');
+        $this->assertIsResource($data);
+
+        $this->expectException(FileNotFound::class);
+        $this->expectExceptionMessage('File with ID foo was not found');
+
+        $this->storage->append('foo', $data);
+    }
+
+    public function testGetOffsetNotExists(): void
+    {
+        $this->expectException(FileNotFound::class);
+        $this->expectExceptionMessage('File with ID foo was not found');
+
+        $this->storage->getOffset('foo');
     }
 }

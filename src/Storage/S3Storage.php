@@ -171,27 +171,15 @@ final class S3Storage implements Storage
         return $this->getObjectMetadata($id)['metadata'] ?: null;
     }
 
-    /**
-     * @throws FileNotFound
-     *
-     * @return array{length: int, metadata: string, upload-id: string}
-     */
+    /** @return array{length: int, metadata: string, upload-id: string} */
     private function getObjectMetadata(string $id): array
     {
-        try {
-            /** @var array{length: int, metadata: string, upload-id: string} $metadata */
-            $metadata = $this->s3->headObject([
-                'Bucket' => $this->bucket,
-                'Key' => $this->prefix . $id . '.meta',
-            ])['Metadata'];
+        /** @var array{length: int, metadata: string, upload-id: string} $metadata */
+        $metadata = $this->s3->headObject([
+            'Bucket' => $this->bucket,
+            'Key' => $this->prefix . $id . '.meta',
+        ])['Metadata'];
 
-            return $metadata;
-        } catch (S3Exception $e) {
-            if ($e->getStatusCode() === 404) {
-                throw FileNotFound::withId($id);
-            }
-
-            throw $e;
-        }
+        return $metadata;
     }
 }
