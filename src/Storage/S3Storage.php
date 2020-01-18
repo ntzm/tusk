@@ -168,7 +168,7 @@ final class S3Storage implements Storage
 
     public function getMetaData(string $id): ?string
     {
-        return $this->getObjectMetadata($id)['metadata'];
+        return $this->getObjectMetadata($id)['metadata'] ?: null;
     }
 
     /**

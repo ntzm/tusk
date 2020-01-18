@@ -55,6 +55,37 @@ final class S3StorageTest extends TestCase
         $this->s3->deleteBucket(['Bucket' => $this->bucket]);
     }
 
+    public function testFullUpload(): void
+    {
+        $this->storage->create('foo', 5242881, null);
+
+        $this->assertSame(5242881, $this->storage->getLength('foo'));
+        $this->assertNull($this->storage->getMetaData('foo'));
+
+        $fiveMb = str_repeat('a', 5242880);
+
+        $largeData = fopen('data://text/plain,' . $fiveMb, 'r');
+        $this->assertIsResource($largeData);
+        $this->storage->append('foo', $largeData);
+
+        $this->assertSame(5242880, $this->storage->getOffset('foo'));
+
+        $smallData = fopen('data://text/plain,b', 'r');
+        $this->assertIsResource($smallData);
+        $this->storage->append('foo', $smallData);
+
+        $this->assertSame(5242881, $this->storage->getOffset('foo'));
+
+        $this->storage->complete('foo');
+
+        $getObjectResponse = $this->s3->getObject([
+            'Bucket' => $this->bucket,
+            'Key' => $this->keyPrefix . 'foo',
+        ]);
+
+        $this->assertSame($fiveMb . 'b', $getObjectResponse['Body']->getContents());
+    }
+
     public function testCreateWithoutMetadata(): void
     {
         $this->storage->create('foo', 5, null);
