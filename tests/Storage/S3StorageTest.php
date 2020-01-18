@@ -40,7 +40,7 @@ final class S3StorageTest extends TestCase
         }
 
         $this->s3 = new S3Client($s3Settings);
-        $this->bucket = getenv('S3_BUCKET');
+        $this->bucket = getenv('S3_BUCKET') ?: '';
         $this->keyPrefix = 'the-prefix/';
         $this->storage = new S3Storage($this->s3, $this->bucket, $this->keyPrefix);
 
