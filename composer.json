@@ -23,7 +23,8 @@
         "phpunit/phpunit": "^8.5",
         "slim/psr7": "^0.6.0",
         "slim/slim": "^4.3",
-        "vimeo/psalm": "^3.7"
+        "vimeo/psalm": "^3.7",
+        "vlucas/phpdotenv": "^4.1"
     },
     "autoload": {
         "psr-4": {

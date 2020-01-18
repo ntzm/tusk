@@ -1,5 +1,6 @@
 /coverage
 /vendor
+/.env.test
 /.php_cs.cache
 /.phpunit.result.cache
 /composer.lock
