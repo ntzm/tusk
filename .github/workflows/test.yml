@@ -11,10 +11,8 @@ jobs:
         with:
           fetch-depth: 1
 
-      - name: Install localstack and run localstack
-        run: |
-          pip install localstack
-          localstack start
+      - name: Run localstack
+        run: docker run -d localstack/localstack -p 4572:4572 -e SERVICES=s3 -e DOCKER_HOST=unix:///var/run/docker.sock
 
       - name: Install composer dependencies
         run: |

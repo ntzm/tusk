@@ -4,13 +4,10 @@ use Dotenv\Dotenv;
 
 require __DIR__ . '/../vendor/autoload.php';
 
-$dotenv = Dotenv::createImmutable(__DIR__ . '/../', '.env.test');
+$_ENV['S3_REGION'] = 'foo';
+$_ENV['S3_AUTH_KEY'] = 'foo';
+$_ENV['S3_AUTH_SECRET'] = 'foo';
+$_ENV['S3_AUTH_BUCKET'] = 'foo';
+$_ENV['S3_ENDPOINT'] = 'http://localhost:4572';
 
-$dotenv->safeLoad();
-
-$dotenv->required([
-    'S3_REGION',
-    'S3_AUTH_KEY',
-    'S3_AUTH_SECRET',
-    'S3_BUCKET',
-]);
+Dotenv::createImmutable(__DIR__ . '/../', '.env.test')->safeLoad();
