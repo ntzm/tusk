@@ -30,4 +30,4 @@ jobs:
         run: vendor/bin/psalm
 
       - name: PHP-CS-Fixer
-        run: vendor/bin/php-cs-fixer --dry-run
+        run: vendor/bin/php-cs-fixer fix --dry-run
