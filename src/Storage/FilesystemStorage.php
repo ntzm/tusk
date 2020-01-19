@@ -9,6 +9,9 @@ final class FilesystemStorage implements Storage
     /** @var string */
     private $directory;
 
+    /** @var array<string, array{length: int, metadata: string|null}> */
+    private $metadataCache = [];
+
     public function __construct(string $directory)
     {
         $this->directory = rtrim($directory, '/') . '/';
@@ -51,6 +54,7 @@ final class FilesystemStorage implements Storage
     public function complete(string $id): void
     {
         unlink($this->directory . $id . '_meta.json');
+        unset($this->metadataCache[$id]);
     }
 
     public function create(string $id, int $length, ?string $metadata): void
@@ -71,6 +75,7 @@ final class FilesystemStorage implements Storage
 
         unlink($this->directory . $id);
         unlink($this->directory . $id . '_meta.json');
+        unset($this->metadataCache[$id]);
     }
 
     public function getLength(string $id): int
@@ -90,6 +95,10 @@ final class FilesystemStorage implements Storage
      */
     private function getFileMetadata(string $id): array
     {
+        if (array_key_exists($id, $this->metadataCache)) {
+            return $this->metadataCache[$id];
+        }
+
         set_error_handler(static function () {});
         $contents = file_get_contents($this->directory . $id . '_meta.json');
         restore_error_handler();
@@ -100,6 +109,8 @@ final class FilesystemStorage implements Storage
 
         /** @var array{length: int, metadata: string|null} $data */
         $data = json_decode($contents, true, JSON_THROW_ON_ERROR);
+
+        $this->metadataCache[$id] = $data;
 
         return $data;
     }
