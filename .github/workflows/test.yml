@@ -11,6 +11,11 @@ jobs:
         with:
           fetch-depth: 1
 
+      - name: Install localstack and run localstack
+        run: |
+          pip install localstack
+          localstack start
+
       - name: Install composer dependencies
         run: |
           composer global require hirak/prestissimo
