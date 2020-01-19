@@ -8,12 +8,12 @@
     "require": {
         "php": "^7.2",
         "ext-json": "*",
-        "aws/aws-sdk-php": "^3.129",
         "psr/event-dispatcher": "^1.0",
         "psr/http-message": "^1.0",
         "webmozart/assert": "^1.6"
     },
     "require-dev": {
+        "aws/aws-sdk-php": "^3.129",
         "friendsofphp/php-cs-fixer": "^2.16",
         "infection/infection": "^0.15.0",
         "mikey179/vfsstream": "^1.6",
@@ -35,6 +35,9 @@
         "psr-4": {
             "TuskTests\\": "tests/"
         }
+    },
+    "suggest": {
+        "aws/aws-sdk-php": "Required to use S3 storage"
     },
     "scripts": {
         "test": "phpunit",
