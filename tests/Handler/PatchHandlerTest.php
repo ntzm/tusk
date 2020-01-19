@@ -9,6 +9,7 @@ use Slim\Psr7\Request;
 use Slim\Psr7\Response;
 use Slim\Psr7\Stream;
 use Slim\Psr7\Uri;
+use Tusk\Event\UploadComplete;
 use Tusk\FileNotFound;
 use Tusk\Handler\PatchHandler;
 use Tusk\ShouldNotHappen;
@@ -232,5 +233,48 @@ final class PatchHandlerTest extends TestCase
             'Tus-Version' => ['1.0.0'],
         ], $response->getHeaders());
         $this->assertSame('', $response->getBody()->getContents());
+    }
+
+    public function testComplete(): void
+    {
+        $storage = $this->createMock(Storage::class);
+        $storage->expects($this->exactly(2))->method('getOffset')->with('foo')->willReturnOnConsecutiveCalls(5, 9);
+        $storage->expects($this->once())->method('getLength')->with('foo')->willReturn(9);
+        $storage->expects($this->once())->method('complete')->with('foo');
+        $storage->expects($this->once())->method('append')->with('foo', $this->callback(function ($data): bool {
+            $this->assertIsResource($data);
+            $this->assertSame('abcd', stream_get_contents($data));
+
+            return true;
+        }));
+
+        $eventDispatcher = $this->createMock(EventDispatcherInterface::class);
+        $eventDispatcher->expects($this->once())->method('dispatch')->with($this->callback(function ($event) {
+            $this->assertInstanceOf(UploadComplete::class, $event);
+            $this->assertSame('foo', $event->fileId());
+
+            return true;
+        }));
+
+        $handler = new PatchHandler($storage, $eventDispatcher);
+
+        $stream = fopen('data://text/plain,abcd', 'r');
+        $this->assertIsResource($stream);
+
+        $request = new Request(
+            'PATCH',
+            new Uri('', ''),
+            new Headers([
+                'Tus-Resumable' => '1.0.0',
+                'Content-Type' => 'application/offset+octet-stream',
+                'Upload-Offset' => '5',
+            ]),
+            [],
+            [],
+            new Stream($stream)
+        );
+        $request = $request->withAttribute('id', 'foo');
+
+        $handler->__invoke($request, new Response());
     }
 }
