@@ -12,7 +12,7 @@ jobs:
           fetch-depth: 1
 
       - name: Run localstack
-        run: docker run -d localstack/localstack -p 4572:4572 -e SERVICES=s3 -e DOCKER_HOST=unix:///var/run/docker.sock --name localstack
+        run: docker run localstack/localstack -p 4572:4572 -e SERVICES=s3 -e DOCKER_HOST=unix:///var/run/docker.sock --name localstack
 
       - name: Install composer dependencies
         run: |
