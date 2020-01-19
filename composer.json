@@ -15,7 +15,6 @@
     "require-dev": {
         "aws/aws-sdk-php": "^3.129",
         "friendsofphp/php-cs-fixer": "^2.16",
-        "infection/infection": "^0.15.0",
         "mikey179/vfsstream": "^1.6",
         "phpstan/phpstan": "^0.12.2",
         "phpstan/phpstan-phpunit": "^0.12.1",
