@@ -10,4 +10,4 @@ putenv('S3_AUTH_SECRET=foo');
 putenv('S3_AUTH_BUCKET=foo');
 putenv('S3_ENDPOINT=http://localhost:4572');
 
-Dotenv::createImmutable(__DIR__ . '/../', '.env.test')->safeLoad();
+Dotenv::createMutable(__DIR__ . '/../', '.env.test')->safeLoad();
