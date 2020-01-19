@@ -12,12 +12,18 @@ jobs:
           fetch-depth: 1
 
       - name: Run localstack
-        run: docker run -d localstack/localstack -p 4572:4572 -e SERVICES=s3 -e DOCKER_HOST=unix:///var/run/docker.sock
+        run: docker run -d localstack/localstack -p 4572:4572 -e SERVICES=s3 -e DOCKER_HOST=unix:///var/run/docker.sock --name localstack
 
       - name: Install composer dependencies
         run: |
           composer global require hirak/prestissimo
           composer install --no-ansi --no-interaction --no-suggest --no-progress --prefer-dist
+
+      - name: Wait for localstack
+        run: |
+          until [ "docker inspect -f {{.State.Running}} localstack" == "true" ]; do
+            sleep 0.5;
+          done;
 
       - name: PHPUnit
         run: vendor/bin/phpunit
