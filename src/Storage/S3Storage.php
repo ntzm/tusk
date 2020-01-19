@@ -18,6 +18,9 @@ final class S3Storage implements Storage
     /** @var string */
     private $prefix;
 
+    /** @var array<string, array{length: int, metadata: string, upload-id: string}> */
+    private $metadataCache = [];
+
     public function __construct(S3Client $s3, string $bucket, string $prefix = '')
     {
         $this->s3 = $s3;
@@ -106,10 +109,7 @@ final class S3Storage implements Storage
                 ],
             ]);
 
-            $this->s3->deleteObject([
-                'Bucket' => $this->bucket,
-                'Key' => $this->prefix . $id . '.meta',
-            ]);
+            $this->removeMetadataFile($id);
         } catch (S3Exception $e) {
             if ($e->getStatusCode() === 404) {
                 throw FileNotFound::withId($id);
@@ -148,10 +148,7 @@ final class S3Storage implements Storage
                 'UploadId' => $uploadId,
             ]);
 
-            $this->s3->deleteObject([
-                'Bucket' => $this->bucket,
-                'Key' => $this->prefix . $id . '.meta',
-            ]);
+            $this->removeMetadataFile($id);
         } catch (S3Exception $e) {
             if ($e->getStatusCode() === 404) {
                 throw FileNotFound::withId($id);
@@ -174,12 +171,28 @@ final class S3Storage implements Storage
     /** @return array{length: int, metadata: string, upload-id: string} */
     private function getObjectMetadata(string $id): array
     {
+        if (array_key_exists($id, $this->metadataCache)) {
+            return $this->metadataCache[$id];
+        }
+
         /** @var array{length: int, metadata: string, upload-id: string} $metadata */
         $metadata = $this->s3->headObject([
             'Bucket' => $this->bucket,
             'Key' => $this->prefix . $id . '.meta',
         ])['Metadata'];
 
+        $this->metadataCache[$id] = $metadata;
+
         return $metadata;
+    }
+
+    private function removeMetadataFile(string $id): void
+    {
+        $this->s3->deleteObject([
+            'Bucket' => $this->bucket,
+            'Key' => $this->prefix . $id . '.meta',
+        ]);
+
+        unset($this->metadataCache[$id]);
     }
 }
