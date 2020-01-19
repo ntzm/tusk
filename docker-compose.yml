@@ -1,0 +1,11 @@
+version: "3.7"
+services:
+  localstack:
+    image: localstack/localstack
+    ports:
+      - 4572:4572
+    environment:
+      - SERVICES=s3
+      - DOCKER_HOST=unix:///var/run/docker.sock
+    volumes:
+      - /tmp/localstack:/tmp/localstack
