@@ -4,14 +4,6 @@
 
 ## Available storage drivers
 
-### Filesystem
-
-Stores files in a given directory
-
-```php
-$storage = new Tusk\Storage\FilesystemStorage('/tmp/tusk');
-```
-
 ### S3
 
 Stores files in S3
