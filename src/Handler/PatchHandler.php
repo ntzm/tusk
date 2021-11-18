@@ -44,21 +44,8 @@ final class PatchHandler
             return $response->withStatus(415);
         }
 
-        set_error_handler(static function () {});
-        $body = fopen('php://temp', 'w+');
-        restore_error_handler();
-        Assert::resource($body);
-
-        $source = $request->getBody()->detach();
-        Assert::resource($source);
-
-        stream_copy_to_stream($source, $body);
-        rewind($body);
-
-        $stat = fstat($body);
-        Assert::isArray($stat);
-
-        $size = $stat['size'];
+        $size = $request->getBody()->getSize();
+        $body = $request->getBody();
 
         $clientOffset = (int) $request->getHeaderLine('Upload-Offset');
 
@@ -79,8 +66,6 @@ final class PatchHandler
             }
         } catch (FileNotFound $e) {
             return $response->withStatus(404);
-        } finally {
-            fclose($body);
         }
 
         if ($newOffset !== ($clientOffset + $size)) {
